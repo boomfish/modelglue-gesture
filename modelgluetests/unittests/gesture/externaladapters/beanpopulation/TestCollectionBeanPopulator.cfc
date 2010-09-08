@@ -16,7 +16,7 @@
 	<cfset collection.setValue( "implicitProp", "implicitPropValue") />
 	<cfset collection.setValue( "explicitProp", "explicitPropValue") />
 	
-	<cfset bean = pop.populate("unittests.externaladapters.beanpopulation.Bean", collection) />
+	<cfset bean = pop.populate("modelgluetests.unittests.gesture.externaladapters.beanpopulation.Bean", collection) />
 	
 	<cfset assertTrue(bean.initRan, "Init() did not get invoked.") />
 	<cfset assertTrue(bean.explicitProp eq "explicitPropValue", "explicit prop not set") />
@@ -25,7 +25,7 @@
 
 <cffunction name="testPopulateExisting" returntype="void" access="public">
 	<cfset var pop = createPopulator() />
-	<cfset var bean = createObject("component", "unittests.externaladapters.beanpopulation.Bean") />
+	<cfset var bean = createObject("component", "modelgluetests.unittests.gesture.externaladapters.beanpopulation.Bean") />
 	<cfset var values = structNew() />
 	<cfset var collection = createCollection() />
 	

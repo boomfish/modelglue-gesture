@@ -1,4 +1,4 @@
-<cfcomponent extends="unittests.ModelGlueAbstractTestCase">
+<cfcomponent extends="modelgluetests.unittests.gesture.ModelGlueAbstractTestCase">
 
 <!--- 
 

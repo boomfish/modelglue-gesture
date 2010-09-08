@@ -1,6 +1,6 @@
-<cfcomponent extends="unittests.ModelGlueAbstractTestCase" output="false">
+<cfcomponent extends="modelgluetests.unittests.gesture.ModelGlueAbstractTestCase" output="false">
 
-	<cfset this.coldspringPath = "/unittests/eventrequest/url/test/ColdSpring.xml">
+	<cfset this.coldspringPath = "/modelgluetests/unittests/gesture/eventrequest/url/ColdSpring.xml">
 
 	<cffunction name="setUp" output="false" access="public" returntype="any" hint="">
 		<cfset createModelGlueIfNotDefined(this.coldspringPath) />
@@ -16,7 +16,7 @@
 	
 	<cfset pop.populate(ctx, source) />
 	
-	<cfset assertTrue(ctx.getValue("someKey") eq "someValue", "value not in context") />
+    <cfset assertEquals("someValue", ctx.getValue("someKey"), "value not in context") />
 </cffunction>
 
 <cffunction name="testUrlBasedPopulator" output="false" returntype="void" access="public">
@@ -29,7 +29,7 @@
 	
 	<cfset pop.populate(ctx) />
 	
-	<cfset assertTrue(ctx.getValue("someKey") eq "someUrlValue", "value not in context") />
+    <cfset assertEquals("someUrlValue", ctx.getValue("someKey"), "value not in context") />
 </cffunction>
 
 <cffunction name="testFormBasedPopulator" output="false" returntype="void" access="public">
@@ -40,7 +40,7 @@
 	
 	<cfset pop.populate(ctx) />
 	
-	<cfset assertTrue(ctx.getValue("someKey") eq "someFormValue", "value not in context") />
+	<cfset assertEquals("someFormValue", ctx.getValue("someKey"), "value not in context") />
 </cffunction>
 
 </cfcomponent>

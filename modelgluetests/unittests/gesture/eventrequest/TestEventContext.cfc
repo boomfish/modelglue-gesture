@@ -1,9 +1,11 @@
-<cfcomponent extends="ModelGlue.gesture.collections.test.TestMapCollectionImplementation">
+<cfcomponent extends="modelgluetests.unittests.gesture.collections.TestMapCollectionImplementation">
 
-<cfset this.coldspringPath = "/ModelGlue/gesture/eventrequest/test/ColdSpring.xml">
+<cfset this.coldspringPath = "/modelgluetests/unittests/gesture/eventrequest/ColdSpring.xml">
 
 <cffunction name="setUp" output="false" access="public" returntype="any" hint="">
 	<cfset request._modelglue.bootstrap.initializationRequest = false />
+    <cfset request._modelglue.bootstrap.initializationLockPrefix = "/modelgluetests/unittests/gesture/.modelglue" />
+    <cfset request._modelglue.bootstrap.initializationLockTimeout = 10 />
 	<cfset createModelGlueIfNotDefined(this.coldspringPath) />
 </cffunction>
 
@@ -532,7 +534,8 @@
 	
 	<cfset var trace = ec.getTrace() />
 	<cfset var thread = CreateObject("java", "java.lang.Thread")>
-	<cfset assertTrue(arrayLen(trace) eq 1 and trace[1].time eq ec.getCreated(), "initial trace statement incorrect: #trace[1].time# eq #ec.getCreated()#")>
+    <cfset var traceStart = ec.getCreated() />
+	<cfset assertTrue(arrayLen(trace) eq 1 and ((trace[1].time eq traceStart) or (trace[1].time eq traceStart + 1)), "initial trace statement incorrect: #trace[1].time# eq #traceStart#")>
 
 	<cfset thread.sleep(100)>	
 

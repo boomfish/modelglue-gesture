@@ -1,4 +1,4 @@
-<cfcomponent extends="unittests.ModelGlueAbstractTestCase" hint="Tests EventHandler, Message, View, and Result CFCs.">
+<cfcomponent extends="modelgluetests.unittests.gesture.ModelGlueAbstractTestCase" hint="Tests EventHandler, Message, View, and Result CFCs.">
 
 <cffunction name="createModelGlueNoInit" access="private">
 	<cfreturn createObject("component", "ModelGlue.gesture.ModelGlue") />
@@ -59,7 +59,7 @@
 <cffunction name="testAddDuplicateEventListenerFromDifferentComponent" returntype="void" access="public">
 	<cfset var mg = createUnconfiguredModelGlue() />
 	<cfset var listeners = "" />
-	<cfset var component = createObject( "component", "unittests.TestModelGlueTemplate" ) />
+	<cfset var component = createObject( "component", "modelgluetests.unittests.gesture.TestModelGlueTemplate" ) />
 	
 	<cfset assertFalse(mg.hasEventListener("message"), "should have no listener for ""message"" before adding listener!") />
 	
