@@ -1,6 +1,6 @@
 <cfcomponent extends="modelgluetests.unittests.gesture.ModelGlueAbstractTestCase">
 		
-	<cfset this.coldspringPath = "/ModelGlue/gesture/loading/test/ColdSpring.xml">
+	<cfset this.coldspringPath = "/modelgluetests/unittests/gesture/loading/ColdSpring.xml">
 
 	<cffunction name="setUp">
 		<cfset createModelGlueIfNotDefined() />	
@@ -16,7 +16,7 @@
 		<cfset var bf = "" />
 		<cfset var bean = "" />
 		
-		<cfset parentBeanFactory.loadBeans(expandPath("/ModelGlue/gesture/loading/test/ParentBeans.xml")) />
+		<cfset parentBeanFactory.loadBeans(expandPath("/modelgluetests/unittests/gesture/loading/ParentBeans.xml")) />
 		<cfset boot.parentBeanFactory = parentBeanFactory />
 		
 		<cfset bf = boot.createBeanFactory() />

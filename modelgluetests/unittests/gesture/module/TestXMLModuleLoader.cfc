@@ -11,7 +11,7 @@
 	 
  --->
 
-<cfset this.coldspringPath = "/ModelGlue/gesture/test/ColdSpring.xml">
+<cfset this.coldspringPath = "/modelgluetests/unittests/gesture/ColdSpring.xml">
 
 <cffunction name="testSimpleXMLModule" returntype="void" access="public">
 	<cfset var mg = createModelGlue(this.coldspringPath) />
@@ -21,18 +21,18 @@
 	<cfset var beanFactory = "" />
 	<cfset var ctrl = "" />
 	
-	<cfset mg.getInternalBeanFactory().loadBeans(expandPath("/ModelGlue/gesture/externaladapters/beaninjection/test/ColdSpring.xml")) />
+	<cfset mg.getInternalBeanFactory().loadBeans(expandPath("/modelgluetests/unittests/gesture/externaladapters/beaninjection/ColdSpring.xml")) />
 	
 	<cfset loader = mg.getInternalBean("modelglue.ModuleLoaderFactory").create("XML") />
 	
-	<cfset loader.load(mg, "/ModelGlue/gesture/module/test/simpleXmlModule.xml") />
+	<cfset loader.load(mg, "/modelgluetests/unittests/gesture/module/simpleXmlModule.xml") />
 
 	<!--- Test controller loading --->
 	<cfset assertTrue(mg.hasEventListener("messageName"), "No listeners for messageName found") />
 	<cfset obj = mg.getEventListeners("messageName") />
 	<cfset assertTrue(arrayLen(obj) eq 1, "Incorrect number of listeners found (should be 1, was #arrayLen(obj)#)") />
 	<cfset obj = obj[1] />
-	<cfset assertTrue(GetMetadata(obj.target).name eq "ModelGlue.gesture.module.test.Controller", "Controller not of right type") />
+	<cfset assertEquals("modelgluetests.unittests.gesture.module.Controller", GetMetadata(obj.target).name, "Controller not of right type") />
 	<cfset assertTrue(obj.listenerFunction eq "listener", "listener function not right name") />
 
 	<!--- Test controller bean injection / autowiring --->
@@ -88,11 +88,11 @@
 	<cfset var beanFactory = "" />
 	
 	<cfset beanFactory = mg.getInternalBeanFactory() />
-	<cfset beanFactory.loadBeans(expandPath("/ModelGlue/gesture/externaladapters/beaninjection/test/ColdSpring.xml")) />
+	<cfset beanFactory.loadBeans(expandPath("/modelgluetests/unittests/gesture/externaladapters/beaninjection/ColdSpring.xml")) />
 	
 	<cfset loader = mg.getInternalBean("modelglue.ModuleLoaderFactory").create("XML") />
 	
-	<cfset loader.load(mg, "/ModelGlue/gesture/module/test/includeStyleMasterXmlModule.xml") />
+	<cfset loader.load(mg, "/modelgluetests/unittests/gesture/module/includeStyleMasterXmlModule.xml") />
 	
 	<cfset assertTrue(mg.hasEventListener("messageName"), "No listeners for messageName found") />
 	<cfset obj = mg.getEventHandler("eventHandlerName") />
@@ -106,11 +106,11 @@
 	<cfset var beanFactory = "" />
 	
 	<cfset beanFactory = mg.getInternalBeanFactory() />
-	<cfset beanFactory.loadBeans(expandPath("/ModelGlue/gesture/externaladapters/beaninjection/test/ColdSpring.xml")) />
+	<cfset beanFactory.loadBeans(expandPath("/modelgluetests/unittests/gesture/externaladapters/beaninjection/ColdSpring.xml")) />
 	
 	<cfset loader = mg.getInternalBean("modelglue.ModuleLoaderFactory").create("XML") />
 	
-	<cfset loader.load(mg, "/ModelGlue/gesture/module/test/masterXmlModule.xml") />
+	<cfset loader.load(mg, "/modelgluetests/unittests/gesture/module/masterXmlModule.xml") />
 	
 	<cfset assertTrue(mg.hasEventListener("messageName"), "No listeners for messageName found") />
 	<cfset obj = mg.getEventHandler("eventHandlerName") />
@@ -125,7 +125,7 @@
 	
 	<cfset loader = mg.getInternalBean("modelglue.ModuleLoaderFactory").create("XML") />
 	
-	<cfset loader.load(mg, "/ModelGlue/gesture/module/test/recursiveXmlModule.xml") />
+	<cfset loader.load(mg, "/modelgluetests/unittests/gesture/module/recursiveXmlModule.xml") />
 	
 	<!--- Not going into an infinite loop = passing. --->	
 </cffunction>
@@ -137,11 +137,11 @@
 	<cfset var beanFactory = "" />
 	
 	<cfset beanFactory = mg.getInternalBeanFactory() />
-	<cfset beanFactory.loadBeans(expandPath("/ModelGlue/gesture/externaladapters/beaninjection/test/ColdSpring.xml")) />
+	<cfset beanFactory.loadBeans(expandPath("/modelgluetests/unittests/gesture/externaladapters/beaninjection/ColdSpring.xml")) />
 	
 	<cfset loader = mg.getInternalBean("modelglue.ModuleLoaderFactory").create("XML") />
 
-	<cfset loader.load(mg, "/ModelGlue/gesture/module/test/simpleXmlModule.xml") />
+	<cfset loader.load(mg, "/modelgluetests/unittests/gesture/module/simpleXmlModule.xml") />
 
 	<cfset assertTrue(mg.getConfigSetting("arbitrarySetting") eq "arbitrarySettingValue", "arbitrary setting not set") />
 </cffunction>
@@ -155,14 +155,14 @@
 	<cfset var viewMappings = 0 />
 	
 	<cfset beanFactory = mg.getInternalBeanFactory() />
-	<cfset beanFactory.loadBeans(expandPath("/ModelGlue/gesture/externaladapters/beaninjection/test/ColdSpring.xml")) />
+	<cfset beanFactory.loadBeans(expandPath("/modelgluetests/unittests/gesture/externaladapters/beaninjection/ColdSpring.xml")) />
 	
 	<cfset loader = mg.getInternalBean("modelglue.ModuleLoaderFactory").create("XML") />
 
 	<cfset viewMappings = mg.getConfigSetting("viewMappings") />
 	<cfset ArrayAppend(viewMappings, "initialViewMapping") />
 	<cfset mg.setConfigSetting("viewMappings", viewMappings) />
-	<cfset loader.load(mg, "/ModelGlue/gesture/module/test/simpleXmlModule.xml") />
+	<cfset loader.load(mg, "/modelgluetests/unittests/gesture/module/simpleXmlModule.xml") />
 	<cfset assertTrue( arrayToList( mg.getConfigSetting("viewMappings") ) eq "initialViewMapping,viewMappingsValue", "viewMappingsValue not appended (was: '#arrayToList( mg.getConfigSetting("viewMappings") )#')") />
 	
 	<cfset viewRenderer = mg.getInternalBean("modelglue.viewRenderer") />
@@ -179,13 +179,13 @@
 	<cfset var viewMappings = arrayNew(1) />
 	<cfset arrayAppend( viewMappings, "initialViewMapping" ) />
 	<cfset beanFactory = mg.getInternalBeanFactory() />
-	<cfset beanFactory.loadBeans(expandPath("/ModelGlue/gesture/externaladapters/beaninjection/test/ColdSpring.xml")) />
+	<cfset beanFactory.loadBeans(expandPath("/modelgluetests/unittests/gesture/externaladapters/beaninjection/ColdSpring.xml")) />
 	
 	<cfset loader = mg.getInternalBean("modelglue.ModuleLoaderFactory").create("XML") />
 	
 	<cfset mg.setConfigSetting("viewMappings", viewMappings) />
 	
-	<cfset loader.load(mg, "/ModelGlue/gesture/module/test/simpleXmlModule.xml") />
+	<cfset loader.load(mg, "/modelgluetests/unittests/gesture/module/simpleXmlModule.xml") />
 	
 	<cfset obj = mg.getBean("mapCollection") />
 
@@ -200,7 +200,7 @@
 	<cfset var beanFactory = "" />
 	
 	<cfset loader = mg.getInternalBean("modelglue.ModuleLoaderFactory").create("XML") />
-	<cfset loader.load(mg, "/ModelGlue/gesture/module/test/extensibleXmlModule.xml") />
+	<cfset loader.load(mg, "/modelgluetests/unittests/gesture/module/extensibleXmlModule.xml") />
 	
 	<cfset obj = mg.getEventHandler("eventHandlerWithExtensibleNotSet") />
 	<cfset assertTrue( obj.extensible IS false, "Extensible setting did not default to false") />
@@ -213,7 +213,7 @@
 </cffunction>
 
 <cffunction name="testViewHelperSetting" returntype="void" access="public">
-	<cfset var mg = createModelGlue("/ModelGlue/gesture/eventrequest/test/ColdSpring.xml") />
+	<cfset var mg = createModelGlue("/modelgluetests/unittests/gesture/eventrequest/ColdSpring.xml") />
 	<cfset var loader = "" />
 	<cfset var obj = "" />
 	<cfset var beanFactory = "" />
@@ -223,7 +223,7 @@
 	<cfset loader = mg.getInternalBean("modelglue.ModuleLoaderFactory").create("XML") />
 	
 	<cfset assertTrue( mg.getConfigSetting("helperMappings") IS "/I/Am/A/HelperMapping", "No initial helper mapping found, this is a config problem probably" ) />
-	<cfset loader.load(mg, "/ModelGlue/gesture/module/test/viewMappingInSettingsXmlModule.xml") />
+	<cfset loader.load(mg, "/modelgluetests/unittests/gesture/module/viewMappingInSettingsXmlModule.xml") />
 	<cfset assertTrue( mg.getConfigSetting("helperMappings") IS "/I/Am/A/HelperMapping,/I/Am/A/Helper/Mapping,/So/Am/I", "Helper mappings from config block not added correctly We got ""#mg.getConfigSetting("helperMappings")#"" ")>
 	<!--- If we don't throw error, we made it. --->
 </cffunction>

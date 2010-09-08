@@ -1,6 +1,6 @@
 <cfcomponent extends="modelgluetests.unittests.gesture.ModelGlueAbstractTestCase">
 
-<cfset this.coldspringPath = "/ModelGlue/gesture/test/ColdSpring.xml">
+<cfset this.coldspringPath = "/modelgluetests/unittests/gesture/ColdSpring.xml">
 
 <cffunction name="testSettingDisableDebugInAFewWays" returntype="void" access="public">
 	<cfset var mg = createModelGlue(this.coldspringPath) />
@@ -9,12 +9,12 @@
 	<cfset var beanFactory = "" />
 	<cfset var ec ="" />
 	<cfset beanFactory = mg.getInternalBeanFactory() />
-	<cfset beanFactory.loadBeans(expandPath("/ModelGlue/gesture/externaladapters/beaninjection/test/ColdSpring.xml")) />
+	<cfset beanFactory.loadBeans(expandPath("/modelgluetests/unittests/gesture/externaladapters/beaninjection/ColdSpring.xml")) />
 	
 	<cfset loader = mg.getInternalBean("modelglue.ModuleLoaderFactory").create("XML") />
 	
 	<cfset loader.load(mg, "/ModelGlue/gesture/modules/internal/utility/config/utility.xml") />
-	<cfset loader.load(mg, "/ModelGlue/gesture/module/test/disableDebugXmlModule.xml") />
+	<cfset loader.load(mg, "/modelgluetests/unittests/gesture/module/disableDebugXmlModule.xml") />
 
 	<cfparam name="request.modelGlueSuppressDebugging" default="false" >
 	<cfset structClear(url) />	

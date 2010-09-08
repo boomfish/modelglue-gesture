@@ -8,13 +8,13 @@
 
 <cffunction name="createBeanFactory" output="false" access="public">
 	<cfset variables.bf = createObject("component", "coldspring.beans.DefaultXmlBeanFactory").init() />
-	<cfset variables.bf.loadBeans(expandPath("/ModelGlue/gesture/externaladapters/beaninjection/test/ColdSpring.xml")) />
+	<cfset variables.bf.loadBeans(expandPath("/modelgluetests/unittests/gesture/externaladapters/beaninjection/ColdSpring.xml")) />
 	
 	<cfreturn variables.bf />
 </cffunction>
 
 <cffunction name="createTargetBean" output="false">
-	<cfreturn createObject("component", "ModelGlue.gesture.externaladapters.beaninjection.test.Target") />
+	<cfreturn createObject("component", "modelgluetests.unittests.gesture.externaladapters.beaninjection.Target") />
 </cffunction>
 
 <cffunction name="testCreationInjectionHooks" output="false" returntype="void" access="public">
@@ -53,8 +53,8 @@
 	<cfset assertTrue(structKeyExists(beanVars, "beans"), "'beans' struct not created") />
 	<cfset assertTrue(structKeyExists(beanVars.beans, "bean"), "'bean' not in 'beans' scope") />
 	<cfset assertTrue(isObject(beanVars.beans.bean), "'bean' in 'beans' not object") />
-	<cfset assertTrue(getMetadata(beanVars.beans.bean).name eq "ModelGlue.gesture.externaladapters.beaninjection.test.Bean", "'bean' in 'beans' not right type!") />
-	<cfset assertTrue(getMetadata(beanVars.beans.bean2).name eq "ModelGlue.gesture.externaladapters.beaninjection.test.Bean2", "'bean2' in 'beans' not right type!") />
+	<cfset assertTrue(getMetadata(beanVars.beans.bean).name eq "modelgluetests.unittests.gesture.externaladapters.beaninjection.Bean", "'bean' in 'beans' not right type!") />
+	<cfset assertTrue(getMetadata(beanVars.beans.bean2).name eq "modelgluetests.unittests.gesture.externaladapters.beaninjection.Bean2", "'bean2' in 'beans' not right type!") />
 </cffunction>
 
 <cffunction name="testMetadataInjection" output="false" returntype="void" access="public">
@@ -70,8 +70,8 @@
 	<cfset assertTrue(structKeyExists(beanVars, "beans"), "'beans' struct not created") />
 	<cfset assertTrue(structKeyExists(beanVars.beans, "bean"), "'bean' not in 'beans' scope") />
 	<cfset assertTrue(isObject(beanVars.beans.bean), "'bean' in 'beans' not object") />
-	<cfset assertTrue(getMetadata(beanVars.beans.bean).name eq "ModelGlue.gesture.externaladapters.beaninjection.test.Bean", "'bean' in 'beans' not right type!") />
-	<cfset assertTrue(getMetadata(beanVars.beans.bean2).name eq "ModelGlue.gesture.externaladapters.beaninjection.test.Bean2", "'bean2' in 'beans' not right type!") />
+	<cfset assertTrue(getMetadata(beanVars.beans.bean).name eq "modelgluetests.unittests.gesture.externaladapters.beaninjection.Bean", "'bean' in 'beans' not right type!") />
+	<cfset assertTrue(getMetadata(beanVars.beans.bean2).name eq "modelgluetests.unittests.gesture.externaladapters.beaninjection.Bean2", "'bean2' in 'beans' not right type!") />
 </cffunction>
 
 <!---
@@ -91,8 +91,8 @@ It's not anticipated that if a new ioc framework comes along that we'd support a
 	
 	<cfset assertTrue(structKeyExists(beanVars, "_bean"), "'_bean' not in variables scope") />
 	<cfset assertTrue(isObject(beanVars._bean), "'_bean' not object") />
-	<cfset assertTrue(getMetadata(beanVars._bean).name eq "ModelGlue.gesture.externaladapters.beaninjection.test.Bean", "'bean' in variables scope not right type!") />
-	<cfset assertTrue(getMetadata(beanVars._bean2).name eq "ModelGlue.gesture.externaladapters.beaninjection.test.Bean2", "'bean2' in variables scope not right type!") />
+	<cfset assertTrue(getMetadata(beanVars._bean).name eq "modelgluetests.unittests.gesture.externaladapters.beaninjection.Bean", "'bean' in variables scope not right type!") />
+	<cfset assertTrue(getMetadata(beanVars._bean2).name eq "modelgluetests.unittests.gesture.externaladapters.beaninjection.Bean2", "'bean2' in variables scope not right type!") />
 </cffunction>
 
 </cfcomponent>

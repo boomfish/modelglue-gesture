@@ -1,6 +1,6 @@
 <cfcomponent extends="modelgluetests.unittests.gesture.ModelGlueAbstractTestCase">
 	
-<cfset this.coldspringPath = "/ModelGlue/gesture/loading/test/ColdSpring.xml">
+<cfset this.coldspringPath = "/modelgluetests/unittests/gesture/loading/ColdSpring.xml">
 
 <cffunction name="testStoreModelGlue" returntype="void" access="public">
 	<cfset var boot = createBootstrapper(this.coldspringPath) />

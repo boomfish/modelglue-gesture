@@ -1,24 +1,4 @@
-To Test the MG Remoting you will need to make a CF Mapping, Virtual Host and etc/hosts entry.
+These unit tests no longer require special Virtual Host setups or /etc/hosts entries.
 
-CF Mapping:   	/buster   	 D:\webroot\modelgluesamples\buster  
-
-Virtual Host: 
-<VirtualHost *:80>
-    DocumentRoot "D:\webroot\modelgluesamples\buster"
-    ServerName buster.local
-</VirtualHost>
-
-/etc/hosts  ( C:\Windows\System32\drivers\etc )
-127.0.0.1	buster.local
-
-
-To Test EventContext.forwardToUrl you will need to make a Virtual Host and etc/hosts entry.
-
-Virtual Host
-<VirtualHost *:80>
-    DocumentRoot "D:\webroot\ModelGlueTrunk"
-    ServerName modelglue.local
-</VirtualHost>
-
-/etc/hosts  ( C:\Windows\System32\drivers\etc )
-127.0.0.1	modelglue.local
+The MG Remoting tests require the /modelgluesamples/buster application to be set up
+on the same site that the unit tests are being run from.

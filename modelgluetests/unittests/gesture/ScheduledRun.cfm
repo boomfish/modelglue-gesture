@@ -19,7 +19,7 @@
 	recurse="true" 
 	excludes="#excludes#"
 	returnvariable="Results"
-	componentpath="unittests"><!---  <-- Fill this in! This is the root component path for your tests. if your tests are at {webroot}/app1/test, then your componentpath will be app1.test   --->
+	componentpath="modelgluetests.unittests.gesture"><!---  <-- Fill this in! This is the root component path for your tests. if your tests are at {webroot}/app1/test, then your componentpath will be app1.test   --->
 
 <cfsetting showdebugoutput="true">
 

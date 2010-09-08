@@ -1,6 +1,6 @@
 <cfcomponent extends="mxunit.framework.TestCase">
 
-	<cfset this.coldspringPath = "/ModelGlue/gesture/test/ColdSpring.xml" />
+	<cfset this.coldspringPath = "/modelgluetests/unittests/gesture/ColdSpring.xml" />
 	<cfset variables.mg = "">
 
 	<cffunction name="setUp" returntype="void" access="public" hint="put things here that you want to run before each test">
@@ -37,7 +37,7 @@
 					createModelGlue()>
 					
 		<!--- load "test" application event definitions --->
-		<cfset mg.getInternalBean("modelglue.ModuleLoaderFactory").create("XML").load( mg, expandPath("/ModelGlue/gesture/test/primaryModule.xml") ) />
+		<cfset mg.getInternalBean("modelglue.ModuleLoaderFactory").create("XML").load( mg, expandPath("/modelgluetests/unittests/gesture/primaryModule.xml") ) />
 
 		<cfset request._modelglue.bootstrap.framework = mg />
 		

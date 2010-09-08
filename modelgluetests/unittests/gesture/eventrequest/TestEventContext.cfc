@@ -30,7 +30,7 @@
 	
 	<cfset vr = createObject("component", "ModelGlue.gesture.view.ViewRenderer").init() />
 	<cfset vr.setModelGlue( mg ) />
-	<cfset vr.addViewMapping("/ModelGlue/gesture/view/test/views") />	
+	<cfset vr.addViewMapping("/modelgluetests/unittests/gesture/view/test/views") />	
 		
 		<!--- Simulating a bootstrapping request --->
 	<cfset request._modelglue.bootstrap.initializationRequest = true />
@@ -490,7 +490,7 @@
 <cffunction name="testForwardToUrl" access="public" returntype="void">
 	<cfset var cfhttp = "" />
 	<cfset var msg = createUUID() />
-	<cfset var path = "http://#cgi.server_name#:#cgi.server_port#/ModelGlue/gesture/eventrequest/test/" />
+	<cfset var path = "http://#cgi.server_name#:#cgi.server_port#/modelgluetests/unittests/gesture/eventrequest/" />
 	<cfset var urlpathdestination = "#path#/ForwardToUrlDestination.cfm?msg=#msg#" />
 	
 	<cfhttp url="#path#ForwardToUrlEndpoint.cfm?url=#urlEncodedFormat(urlpathdestination)#"  />
@@ -557,7 +557,7 @@
 <!--- BEAN POPULATION TEST --->
 <cffunction name="testMakeEventBeanAllFields" access="public" returntype="void">
 	<cfset var ec = createEventContext() />
-	<cfset var bean = createObject("component", "ModelGlue.gesture.externaladapters.beanpopulation.test.Bean").init() />
+	<cfset var bean = createObject("component", "modelgluetests.unittests.gesture.externaladapters.beanpopulation.Bean").init() />
 	
 	<cfset ec.setValue("implicitProp", "implicitPropValue") />
 	<cfset ec.setValue("explicitProp", "explicitPropValue") />
@@ -570,7 +570,7 @@
 
 <cffunction name="testMakeEventBeanWithExplicitlyListedFields" access="public" returntype="void">
 	<cfset var ec = createEventContext() />
-	<cfset var bean = createObject("component", "ModelGlue.gesture.externaladapters.beanpopulation.test.Bean").init() />
+	<cfset var bean = createObject("component", "modelgluetests.unittests.gesture.externaladapters.beanpopulation.Bean").init() />
 	
 	<cfset ec.setValue("explicitProp", "explicitPropValue") />
 	
@@ -587,7 +587,7 @@
 	<cfset var ec = "" />
 	
 	<cfset loader = mg.getInternalBean("modelglue.ModuleLoaderFactory").create("XML") />
-	<cfset loader.load(mg, "/ModelGlue/gesture/eventrequest/test/eventHandlerName.xml") />
+	<cfset loader.load(mg, "/modelgluetests/unittests/gesture/eventrequest/eventHandlerName.xml") />
 	
 	<cfset structClear(url) />
 	
@@ -604,7 +604,7 @@
 	<cfset var ec = "" />
 	
 	<cfset loader = mg.getInternalBean("modelglue.ModuleLoaderFactory").create("XML") />
-	<cfset loader.load(mg, "/ModelGlue/gesture/eventrequest/test/eventHandlerName.xml") />
+	<cfset loader.load(mg, "/modelgluetests/unittests/gesture/eventrequest/eventHandlerName.xml") />
 	
 	<cfset structClear(url) />
 	
@@ -624,7 +624,7 @@
 	<cfset var ec = "" />
 	
 	<cfset loader = mg.getInternalBean("modelglue.ModuleLoaderFactory").create("XML") />
-	<cfset loader.load(mg, "/ModelGlue/gesture/eventrequest/test/eventHandlerExtensibility.xml") />
+	<cfset loader.load(mg, "/modelgluetests/unittests/gesture/eventrequest/eventHandlerExtensibility.xml") />
 	
 	<cfset structClear(url) />
 	
@@ -643,7 +643,7 @@
 	<cfset var ec = "" />
 	
 	<cfset loader = mg.getInternalBean("modelglue.ModuleLoaderFactory").create("XML") />
-	<cfset loader.load(mg, "/ModelGlue/gesture/eventrequest/test/format/formatOrder.xml") />
+	<cfset loader.load(mg, "/modelgluetests/unittests/gesture/eventrequest/format/formatOrder.xml") />
 	
 	<cfset structClear(url) />
 	
@@ -663,7 +663,7 @@
 	<cfset var ec = "" />
 	
 	<cfset loader = mg.getInternalBean("modelglue.ModuleLoaderFactory").create("XML") />
-	<cfset loader.load(mg, "/ModelGlue/gesture/eventrequest/test/format/formatOrder.xml") />
+	<cfset loader.load(mg, "/modelgluetests/unittests/gesture/eventrequest/format/formatOrder.xml") />
 	
 	<cfset structClear(url) />
 	
@@ -683,7 +683,7 @@
 	<cfset var ec = "" />
 	
 	<cfset loader = mg.getInternalBean("modelglue.ModuleLoaderFactory").create("XML") />
-	<cfset loader.load(mg, "/ModelGlue/gesture/eventrequest/test/format/formatOrder.xml") />
+	<cfset loader.load(mg, "/modelgluetests/unittests/gesture/eventrequest/format/formatOrder.xml") />
 	
 	<cfset structClear(url) />
 	
@@ -703,7 +703,7 @@
 	<cfset var ec = "" />
 	
 	<cfset loader = mg.getInternalBean("modelglue.ModuleLoaderFactory").create("XML") />
-	<cfset loader.load(mg, "/ModelGlue/gesture/eventrequest/test/format/formatOrder.xml") />
+	<cfset loader.load(mg, "/modelgluetests/unittests/gesture/eventrequest/format/formatOrder.xml") />
 	
 	<cfset structClear(url) />
 	
@@ -723,7 +723,7 @@
 	<cfset var ec = "" />
 	
 	<cfset loader = mg.getInternalBean("modelglue.ModuleLoaderFactory").create("XML") />
-	<cfset loader.load(mg, "/ModelGlue/gesture/eventrequest/test/format/formatOrder.xml") />
+	<cfset loader.load(mg, "/modelgluetests/unittests/gesture/eventrequest/format/formatOrder.xml") />
 	
 	<cfset structClear(url) />
 	
@@ -743,7 +743,7 @@
 	<cfset var ec = "" />
 	
 	<cfset loader = mg.getInternalBean("modelglue.ModuleLoaderFactory").create("XML") />
-	<cfset loader.load(mg, "/ModelGlue/gesture/eventrequest/test/format/formatOrder.xml") />
+	<cfset loader.load(mg, "/modelgluetests/unittests/gesture/eventrequest/format/formatOrder.xml") />
 	
 	<cfset structClear(url) />
 	
@@ -763,7 +763,7 @@
 	<cfset var ec = "" />
 	
 	<cfset loader = mg.getInternalBean("modelglue.ModuleLoaderFactory").create("XML") />
-	<cfset loader.load(mg, "/ModelGlue/gesture/eventrequest/test/format/formatOrder.xml") />
+	<cfset loader.load(mg, "/modelgluetests/unittests/gesture/eventrequest/format/formatOrder.xml") />
 	
 	<cfset structClear(url) />
 	
@@ -783,7 +783,7 @@
 	<cfset var ec = "" />
 	
 	<cfset loader = mg.getInternalBean("modelglue.ModuleLoaderFactory").create("XML") />
-	<cfset loader.load(mg, "/ModelGlue/gesture/eventrequest/test/format/formatOrder.xml") />
+	<cfset loader.load(mg, "/modelgluetests/unittests/gesture/eventrequest/format/formatOrder.xml") />
 	
 	<cfset structClear(url) />
 	

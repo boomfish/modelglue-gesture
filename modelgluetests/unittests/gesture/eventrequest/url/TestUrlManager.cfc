@@ -1,6 +1,6 @@
-<cfcomponent extends="modelglue.gesture.test.ModelGlueAbstractTestCase">
+<cfcomponent extends="modelgluetests.unittests.gesture.ModelGlueAbstractTestCase">
 	
-	<cfset this.coldspringPath = "/ModelGlue/gesture/eventrequest/url/test/ColdSpring.xml">
+	<cfset this.coldspringPath = "/modelgluetests/unittests/gesture/eventrequest/url/ColdSpring.xml">
 	
 	<cffunction name="setUp" output="false" access="public" returntype="any" hint="">
 		<cfset createModelGlueIfNotDefined(this.coldspringPath) />
