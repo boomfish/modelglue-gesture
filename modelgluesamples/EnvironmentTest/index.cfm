@@ -22,18 +22,19 @@
 <cfoutput>
 
 	<h3>System Information</h3>
+	<p>To post these details privately to <a href="http://modelglue.pastebin.com">pastebin.com</a> click <a href="?mode=paste">here</a></p>
 	<table>
 		<tr>
 			<td>Operating System</td>
-			<td>#data.jvmprops["os.name"]#</td>
+			<td>#data.jvmprops.os_name#</td>
 		</tr>
 		<tr>
 			<td>System Architecture</td>
-			<td>#data.jvmprops["os.arch"]#</td>
+			<td>#data.jvmprops.os_arch#</td>
 		</tr>
 		<tr>
 			<td>JVM Version</td>
-			<td>#data.jvmprops["java.version"]#</td>
+			<td>#data.jvmprops.java_version#</td>
 		</tr>
 	</table>
 
@@ -81,18 +82,18 @@
 		</tr>
 		<tr>
 			<td>Is Monitoring Turned on?</td>
-			<td>#getText(data.mon.monitoring)#</td>
-			<td><img src="#getIcon(data.mon.monitoring, true)#" /></td>
+			<td>#getText(data.monitoring.monitoring)#</td>
+			<td><img src="#getIcon(data.monitoring.monitoring, true)#" /></td>
 		</tr>
 		<tr>
 			<td>Is Memory Monitoring Turned on?</td>
-			<td>#getText(data.mon.memory)#</td>
-			<td><img src="#getIcon(data.mon.memory, true)#" /></td>
+			<td>#getText(data.monitoring.memory)#</td>
+			<td><img src="#getIcon(data.monitoring.memory, true)#" /></td>
 		</tr>
 		<tr>
 			<td>Is Profiling Turned on?</td>
-			<td>#getText(data.mon.profiling)#</td>
-			<td><img src="#getIcon(data.mon.profiling, true)#" /></td>
+			<td>#getText(data.monitoring.profiling)#</td>
+			<td><img src="#getIcon(data.monitoring.profiling, true)#" /></td>
 		</tr>
 	</table>
 
@@ -111,166 +112,30 @@
 			<td>#byteConvert(data.memory.free)#</td>
 		</tr>
 	</table>
-	
-	
 </cfoutput>
+
+<cfelseif url.mode IS "paste">
+	<cfset data = structToText(getEnvironmentData()) />
+	<cfhttp url="http://modelglue.pastebin.com/api_public.php" method="post">
+		<cfhttpparam type="formfield" name="paste_code" value="#data#" /> 
+		<cfhttpparam type="formfield" name="paste_expire_date" value="N" /> 
+		<cfhttpparam type="formfield" name="paste_format" value="text" /> 
+		<cfhttpparam type="formfield" name="paste_private" value="1" /> 
+		<cfhttpparam type="formfield" name="paste_subdomain" value="modelglue" /> 
+	</cfhttp>
+	<cfset pburl = trim(cfhttp.filecontent) />
+	<cfoutput>
+	<p>
+		Your environment info has been posted (privately) to pastebin at url below<br>
+		Please copy this url into any messages to the <a href="https://groups.google.com/group/model-glue">ModelGlue group</a>
+	</p>
+	<p><a href="#pburl#">#pburl#</a></p>
 	
-	<cffunction name="getText" output="false">
-		<cfargument name="value" />
-		<cfif isBoolean(arguments.value)>
-			<cfreturn yesnoformat(arguments.value) />
-		</cfif>
-		<cfreturn arguments.value />
-	</cffunction>
-	
-	<cffunction name="getIcon" output="false">
-		<cfargument name="value" type="string" />
-		<cfargument name="invert" type="boolean" default="false" />
-		
-		<cfif isBoolean(arguments.value)>
-			<cfif arguments.invert>
-				<cfset arguments.value = NOT arguments.value />
-			</cfif>
-		
-			<cfif arguments.value>
-				<cfreturn "check.png" />
-			<cfelse>
-				<cfreturn "cross.png" />
-			</cfif>
-		<cfelse>
-			<cfreturn "question.png" />
-		</cfif>
-		
-	</cffunction>
+	<pre>#data#</pre>
 	
 	
-	<cffunction name="getEnvironmentData" output="false">
-		<cfset var data = structnew() />
-		<cfset data.debug = getDebugStatus() />
-		<cfset data.mon = getMonitoring() />
-		<cfset data.jvmprops = getJvmProps() />
-		<cfset data.webserver = getWebServer() />
-		<cfset data.engine = getEngine() />
-		<cfset data.memory = getJvmMemory() />
-		<cfreturn data />
-	</cffunction>  
 	
-	
-	<cffunction name="getEngine" output="false">
-		<cfset var ret = structnew() />
-		<cfset ret.name = server.coldfusion.productname />
-		<cfset ret.version = server.coldfusion.productversion />
-		<cfset ret.appserver = server.coldfusion.appserver />
-		<cfreturn ret />
-	</cffunction>
-	
-	<cffunction name="getWebServer" output="false">
-		<cfset var path = "" />
-		<cfset var value = "" />
-		<cfset var ret = structnew() /> 
-		<cfset ret.sesurls = false />
-		<cfset ret.server = "" />
-		<cfhttp url="#cgi.http_host#/#cgi.script_name#/some/path?mode=ses&value=foo" />
-		
-		<cfparam name="cfhttp.responseheader.status_code" default="" />
-		<cfparam name="cfhttp.responseheader.server" default="UNKNOWN" />
-		
-		<cfset ret.server = cfhttp.responseheader.server />
-		
-		<cfif listlen(cfhttp.filecontent) IS 2>
-			<cfset path = listfirst(cfhttp.filecontent) />
-			<cfset value = listlast(cfhttp.filecontent) />
-			<cfif cfhttp.responseheader.status_code IS 200 AND path IS "/some/path" AND value IS "foo">
-				<cfset ret.sesurls = true />
-			</cfif>
-		</cfif> 
-		<cfreturn ret />
-	</cffunction>
-	
-	<cffunction name="getJvmMemory" output="false">
-		<cfset var rt = 0 />
-		<cfset var mem = structnew() />
-		<cfset mem.max = 0 />
-		<cfset mem.used = 0 />
-		<cfset mem.total = 0 />
-		<cfset mem.free = 0 />
-	
-		<cftry>
-			<cfset rt = createObject("java","java.lang.Runtime").getRuntime()>
-			<cfset mem.max = rt.maxMemory() />	
-			<cfset mem.free = rt.freeMemory() />
-			<cfset mem.total = rt.totalMemory() />
-			<cfset mem.used = mem.total-mem.free />
-			<cfcatch type="Any">
-			</cfcatch>
-		</cftry>
-		<cfreturn mem />
-	</cffunction>
-	
-	<cffunction name="getJvmProps" output="false">
-		<cfset var props = structnew() />
-		<cfset var sys = 0 />
-		<cfset var i = "" />
-		<cfloop list="java.version,os.name,os.arch" index="i">
-			<cftry>
-				<cfobject action="CREATE" type="JAVA" class="java.lang.System" name="sys">
-				<cfset props[i] = sys.getProperty(i) />
-				<cfcatch type="Any">
-					<cfset props[i] = "" />
-				</cfcatch>
-			</cftry>
-		</cfloop>
-		<cfreturn props />
-	</cffunction>
-	
-	<cffunction name="getMonitoring" output="false">
-		<cfset ret = structnew() />
-		<cfset ret.memory = "UNKNOWN" />
-		<cfset ret.profiling = "UNKNOWN" />
-		<cfset ret.monitoring = "UNKNOWN" />
-		<cfset var factory = 0 />
-		 
-		<cftry>
-			<cfobject action="CREATE" type="JAVA" class="coldfusion.server.ServiceFactory" name="factory">
-			<cfset ret.memory = factory.getMonitoringService().isMemoryMonitoringEnabled() />
-			<cfset ret.profiling = factory.getMonitoringService().isProfilingEnabled() />
-			<cfset ret.monitoring = factory.getMonitoringService().isMonitoringEnabled() />
-			
-			<cfcatch type="Any"></cfcatch>
-		</cftry>
-		<cfreturn ret />
-	</cffunction>
-	
-	<cffunction name="getDebugStatus" output="false">
-		<cfset var tempfile = "#createuuid()#.cfm" /> 
-		<cfset var factory = 0 />
-		<cfset var ret = structnew() />
-		<cfset ret.debugging = isDebugMode() />
-		<cfset ret.reportexecutiontime = "UNKNOWN" />
-		
-		<cftry>
-			<!--- this page wont get added to the execution time data until its finished processing
-			 so we need to include a file to make sure that theres one in the debugging data --->
-			<cffile action="write" file="#expandpath('./#tempfile#')#" output=""  />
-			<cfinclude template="#tempfile#" />
-			<cffile action="delete" file="#expandpath('./#tempfile#')#" />
-			<!--- this will throw if debugging is not on, so we can't check report execution times --->
-			<cfobject action="CREATE" type="JAVA" class="coldfusion.server.ServiceFactory" name="factory">
-			<cfset debugTable = factory.getDebuggingService().getDebugger().getData()>
-			<cfquery dbType="query" name="getTemplates" debug="false">
-				SELECT template
-				FROM debugTable
-				WHERE type = 'Template'
-			</cfquery>
-			<cfif getTemplates.recordcount>
-				<cfset ret.reportexecutiontime = "YES" />
-			<cfelse>
-				<cfset ret.reportexecutiontime = "NO" />
-			</cfif>
-			<cfcatch type="Any"></cfcatch>
-		</cftry>
-		<cfreturn ret />
-	</cffunction>
+	</cfoutput>
 
 <cfelseif url.mode IS "ses">
 	<cfsetting showdebugoutput="false" />
@@ -278,6 +143,184 @@
 	<cfparam name="cgi.path_info" default="" />
 	<cfcontent reset="true" /><cfoutput>#cgi.path_info#,#url.value#</cfoutput><cfabort>
 </cfif>
+
+
+<cffunction name="structToText" output="false">
+	<cfargument name="struct" />
+	<cfargument name="indent" default="0" />
+	<cfset var i="" />
+	<cfset var s = "" />
+	<cfloop collection="#struct#" item="i">
+		<cfif isSimpleValue(struct[i])>
+			<cfset s = s & repeatstring(chr(9), arguments.indent) & "#i#: #struct[i]# #chr(10)#" />
+		<cfelseif isStruct(struct[i])>
+			<cfset s = s & "#i#: #chr(10)#" />
+			<cfset s = s & structToText(struct[i], arguments.indent+1) />		
+		</cfif>
+	</cfloop>
+	<cfreturn s />
+</cffunction>
+
+
+
+<cffunction name="getText" output="false">
+	<cfargument name="value" />
+	<cfif isBoolean(arguments.value)>
+		<cfreturn yesnoformat(arguments.value) />
+	</cfif>
+	<cfreturn arguments.value />
+</cffunction>
+
+<cffunction name="getIcon" output="false">
+	<cfargument name="value" type="string" />
+	<cfargument name="invert" type="boolean" default="false" />
+	
+	<cfif isBoolean(arguments.value)>
+		<cfif arguments.invert>
+			<cfset arguments.value = NOT arguments.value />
+		</cfif>
+	
+		<cfif arguments.value>
+			<cfreturn "check.png" />
+		<cfelse>
+			<cfreturn "cross.png" />
+		</cfif>
+	<cfelse>
+		<cfreturn "question.png" />
+	</cfif>
+	
+</cffunction>
+
+
+<cffunction name="getEnvironmentData" output="false">
+	<cfset var data = structnew() />
+	<cfset data.debug = getDebugStatus() />
+	<cfset data.monitoring = getMonitoring() />
+	<cfset data.jvmprops = getJvmProps() />
+	<cfset data.webserver = getWebServer() />
+	<cfset data.engine = getEngine() />
+	<cfset data.memory = getJvmMemory() />
+	<cfreturn data />
+</cffunction>  
+
+
+<cffunction name="getEngine" output="false">
+	<cfset var ret = structnew() />
+	<cfset ret.name = server.coldfusion.productname />
+	<cfset ret.version = server.coldfusion.productversion />
+	<cfset ret.appserver = server.coldfusion.appserver />
+	<cfreturn ret />
+</cffunction>
+
+<cffunction name="getWebServer" output="false">
+	<cfset var path = "" />
+	<cfset var value = "" />
+	<cfset var ret = structnew() /> 
+	<cfset ret.sesurls = false />
+	<cfset ret.server = "" />
+	<cfhttp url="#cgi.http_host#/#cgi.script_name#/some/path?mode=ses&value=foo" />
+	
+	<cfparam name="cfhttp.responseheader.status_code" default="" />
+	<cfparam name="cfhttp.responseheader.server" default="UNKNOWN" />
+	
+	<cfset ret.server = cfhttp.responseheader.server />
+	
+	<cfif listlen(cfhttp.filecontent) IS 2>
+		<cfset path = listfirst(cfhttp.filecontent) />
+		<cfset value = listlast(cfhttp.filecontent) />
+		<cfif cfhttp.responseheader.status_code IS 200 AND path IS "/some/path" AND value IS "foo">
+			<cfset ret.sesurls = true />
+		</cfif>
+	</cfif> 
+	<cfreturn ret />
+</cffunction>
+
+<cffunction name="getJvmMemory" output="false">
+	<cfset var rt = 0 />
+	<cfset var mem = structnew() />
+	<cfset mem.max = 0 />
+	<cfset mem.used = 0 />
+	<cfset mem.total = 0 />
+	<cfset mem.free = 0 />
+
+	<cftry>
+		<cfset rt = createObject("java","java.lang.Runtime").getRuntime()>
+		<cfset mem.max = rt.maxMemory() />	
+		<cfset mem.free = rt.freeMemory() />
+		<cfset mem.total = rt.totalMemory() />
+		<cfset mem.used = mem.total-mem.free />
+		<cfcatch type="Any">
+		</cfcatch>
+	</cftry>
+	<cfreturn mem />
+</cffunction>
+
+<cffunction name="getJvmProps" output="false">
+	<cfset var props = structnew() />
+	<cfset var sys = 0 />
+	<cfset var i = "" />
+	<cfset key = "" />
+	<cfloop list="java.version,os.name,os.arch" index="i">
+		<cftry>
+			<cfobject action="CREATE" type="JAVA" class="java.lang.System" name="sys">
+			<cfset key = replace(i, ".", "_", "ALL") />
+			<cfset props[key] = sys.getProperty(i) />
+			<cfcatch type="Any">
+				<cfset props[key] = "" />
+			</cfcatch>
+		</cftry>
+	</cfloop>
+	<cfreturn props />
+</cffunction>
+
+<cffunction name="getMonitoring" output="false">
+	<cfset ret = structnew() />
+	<cfset ret.memory = "UNKNOWN" />
+	<cfset ret.profiling = "UNKNOWN" />
+	<cfset ret.monitoring = "UNKNOWN" />
+	<cfset var factory = 0 />
+	 
+	<cftry>
+		<cfobject action="CREATE" type="JAVA" class="coldfusion.server.ServiceFactory" name="factory">
+		<cfset ret.memory = factory.getMonitoringService().isMemoryMonitoringEnabled() />
+		<cfset ret.profiling = factory.getMonitoringService().isProfilingEnabled() />
+		<cfset ret.monitoring = factory.getMonitoringService().isMonitoringEnabled() />
+		
+		<cfcatch type="Any"></cfcatch>
+	</cftry>
+	<cfreturn ret />
+</cffunction>
+
+<cffunction name="getDebugStatus" output="false">
+	<cfset var tempfile = "#createuuid()#.cfm" /> 
+	<cfset var factory = 0 />
+	<cfset var ret = structnew() />
+	<cfset ret.debugging = isDebugMode() />
+	<cfset ret.reportexecutiontime = "UNKNOWN" />
+	
+	<cftry>
+		<!--- this page wont get added to the execution time data until its finished processing
+		 so we need to include a file to make sure that theres one in the debugging data --->
+		<cffile action="write" file="#expandpath('./#tempfile#')#" output=""  />
+		<cfinclude template="#tempfile#" />
+		<cffile action="delete" file="#expandpath('./#tempfile#')#" />
+		<!--- this will throw if debugging is not on, so we can't check report execution times --->
+		<cfobject action="CREATE" type="JAVA" class="coldfusion.server.ServiceFactory" name="factory">
+		<cfset debugTable = factory.getDebuggingService().getDebugger().getData()>
+		<cfquery dbType="query" name="getTemplates" debug="false">
+			SELECT template
+			FROM debugTable
+			WHERE type = 'Template'
+		</cfquery>
+		<cfif getTemplates.recordcount>
+			<cfset ret.reportexecutiontime = "YES" />
+		<cfelse>
+			<cfset ret.reportexecutiontime = "NO" />
+		</cfif>
+		<cfcatch type="Any"></cfcatch>
+	</cftry>
+	<cfreturn ret />
+</cffunction>
 	
 
 <cfscript>
